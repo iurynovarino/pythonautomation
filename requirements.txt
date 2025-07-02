@@ -1,0 +1,12 @@
+azure-identity
+azure-mgmt-resource
+azure-mgmt-network
+azure-mgmt-storage
+azure-storage-blob
+azure-mgmt-containerregistry
+azure-mgmt-rdbms-postgresql-flexibleservers
+azure-mgmt-containerservice
+azure-mgmt-datafactory
+azure-mgmt-cdn
+azure-mgmt-servicebus
+azure-mgmt-privatedns
