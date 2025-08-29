@@ -2,17 +2,17 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.datafactory import DataFactoryManagementClient
 from azure.mgmt.datafactory.models import Factory
 
-# Configurações
-subscription_id = "aff87ef7-615a-4815-99d9-c8673c2dfc22"
-resource_group = "rg_teste"
-location = "brazilsouth"
-datafactory_name = "archon-dt-teste-hml"
+# settings
+subscription_id = "<subscription_id>"  # Change to your subscription ID
+resource_group = "<resource_group>"  # Change to your resource group name
+location = "<location>"  # Change to your desired location, e.g., "brazilsouth"
+datafactory_name = "<your_datafactory_name>"  # Change to your desired Data Factory name
 
-# Autenticação
+# Autentication
 credential = DefaultAzureCredential()
 client = DataFactoryManagementClient(credential, subscription_id)
 
-# Criação do Data Factory
+# Create Data Factory
 print(f"Criando Azure Data Factory '{datafactory_name}' em '{location}'...")
 
 factory = client.factories.create_or_update(
