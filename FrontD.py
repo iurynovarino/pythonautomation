@@ -8,21 +8,21 @@ from azure.mgmt.cdn.models import (
     AFDOrigin,
 )
 
-# Configurações
-subscription_id = 'aff87ef7-615a-4815-99d9-c8673c2dfc22'
-resource_group = 'rg_teste'
-location = 'global'  # Front Door é sempre 'global'
-profile_name = 'vestigio-teste'
-endpoint_name = 'vestigio-endpoint'
-origin_group_name = 'originGroup1'
-origin_name = 'originStorage'
-storage_account_hostname = 'custodiatestehml.blob.core.windows.net'
+# Settings
+subscription_id = '<subscription_id>'  # Change to your subscription ID
+resource_group = '<resource_group>'  # Change to your resource group name
+location = 'global'  # Front Door is always 'global'
+profile_name = '<your_front_door_profile>'  # Change to your desired Front Door profile name
+endpoint_name = '<your_front_door_endpoint>'  # Change to your desired Front Door endpoint name
+origin_group_name = '<your_origin_group>'  # Change to your desired Origin Group name
+origin_name = '<your_origin>'  # Change to your desired Origin name
+storage_account_hostname = '<storage_account_name>.blob.core.windows.net'
 
-# Autenticação
+# Autentication
 credential = DefaultAzureCredential()
 client = CdnManagementClient(credential, subscription_id)
 
-# Criar Profile do Azure Front Door
+# Create Profile do Azure Front Door
 client.profiles.begin_create(
     resource_group_name=resource_group,
     profile_name=profile_name,
@@ -32,7 +32,7 @@ client.profiles.begin_create(
     )
 ).result()
 
-# Criar Origin Group para o Front Door
+# Criate Origin Group to Front Door
 client.afd_origin_groups.begin_create(
     resource_group_name=resource_group,
     profile_name=profile_name,
@@ -49,7 +49,7 @@ client.afd_origin_groups.begin_create(
     )
 ).result()
 
-# Criar Origin (apontando para o Storage Account)
+# Create Origin (ponting to the Storage Account)
 client.afd_origins.begin_create(
     resource_group_name=resource_group,
     profile_name=profile_name,
@@ -64,7 +64,7 @@ client.afd_origins.begin_create(
     )
 ).result()
 
-# Criar Endpoint para o Front Door
+# Create Endpoint to the Front Door
 client.afd_endpoints.begin_create(
     resource_group_name=resource_group,
     profile_name=profile_name,
