@@ -7,10 +7,10 @@ from azure.mgmt.servicebus.models import (
 )
 
 # Variables declaration
-subscription_id = "sua_subscription_id"  # Substitua pelo ID da sua assinatura
-resource_group = "rg_teste"
-location = "brazilsouth"
-namespace_name = "sbns-teste-hml" # Nome do namespace do Service Bus
+subscription_id = "<YOUR_AZURE_SUBSCRIPTION_ID>"  # Replace with your Azure Subscription ID
+resource_group = "<YOUR_RESOURCE_GROUP>"  # Replace with your Resource Group name
+location = "<YOUR_AZURE_LOCATION>"  # e.g., "brazilsouth"
+namespace_name = "<YOUR_NAMESPACE_NAME>" # Replace with your desired namespace name
 
 # Autentication and client setup
 credential = DefaultAzureCredential()
