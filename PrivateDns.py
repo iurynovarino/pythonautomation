@@ -2,13 +2,13 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.privatedns import PrivateDnsManagementClient
 from azure.mgmt.privatedns.models import ARecord, RecordSet
 
-# Variáveis principais
-subscription_id = 'sua subscription_id'  # Substitua pelo ID da sua assinatura
-resource_group_name = "GlobalService" # Substitua pelo nome do seu grupo de recursos
-zone_name = "sua zone_name"  # Substitua pelo nome da sua zona DNS privada
-ip_servidor = "10.21.0.120" #Inserir o IP do backend que será utilizado pelos serviços
+# Variables declaration
+subscription_id = '<subscription_id>'  # Change to your subscription ID
+resource_group_name = "<resource_group>" # Change to your resource group name
+zone_name = "<your_private_dns_zone>"  # Change to your Private DNS Zone name, e.g., "myprivatednszone.com"
+ip_servidor = "<public_ip_address>" # Change to your server's private IP address
 
-# Lista dos serviços 
+# Services list
 servicos = [
     "audit-service-homolog",
     "catalog-service-homolog",
@@ -22,7 +22,7 @@ servicos = [
     "user-service-homolog",
 ]
 
-# Autenticação
+# Autentication and client setup
 credential = DefaultAzureCredential()
 private_dns_client = PrivateDnsManagementClient(credential, subscription_id)
 
@@ -48,7 +48,7 @@ def create_or_update_private_dns_record(record_name, ip_address):
         print(f"❌ Erro ao processar '{record_name}':", e)
         raise
 
-# Loop para adicionar todos os serviços
+# Looping to add all services
 for service in servicos:
     create_or_update_private_dns_record(service, ip_servidor)
 
