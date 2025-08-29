@@ -2,18 +2,18 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.network import NetworkManagementClient
 import os
 
-# Parâmetros
-subscription_id = "sua subscription_id"  # Substitua aqui
-resource_group = "rg_teste"
-location = "brazilsouth"
-vnet_name = "vnet_teste-hml"
-subnet_name = "sub_arck_teste"
+# Variables declaration
+subscription_id = "<subscription_id>"  # change to your subscription ID
+resource_group = "<resource_group>"  # change to your resource group name
+location = "<location>"  # change to your desired location, e.g., "brazilsouth"
+vnet_name = "<vnet_name>"  # change to your desired VNet name
+subnet_name = "<subnet_name>"  # change to your desired Subnet name
 
-# Inicializa a credencial e o client
+# Start the credential and the client
 credential = DefaultAzureCredential()
 network_client = NetworkManagementClient(credential, subscription_id)
 
-# Define configuração da VNet
+# setting the vnet configuration
 vnet_params = {
     "location": location,
     "address_space": {
@@ -21,7 +21,7 @@ vnet_params = {
     }
 }
 
-# Cria a VNet
+# Creating the VNet
 print(f"Criando VNet '{vnet_name}'...")
 async_vnet_creation = network_client.virtual_networks.begin_create_or_update(
     resource_group,
@@ -31,12 +31,12 @@ async_vnet_creation = network_client.virtual_networks.begin_create_or_update(
 vnet_result = async_vnet_creation.result()
 print(f"VNet '{vnet_result.name}' criada com sucesso!")
 
-# Define configuração da Subnet
+# Setting the subnet configuration
 subnet_params = {
     "address_prefix": "10.24.0.0/18"
 }
 
-# Cria a Subnet
+# Creating the subnet
 print(f"Criando Subnet '{subnet_name}'...")
 async_subnet_creation = network_client.subnets.begin_create_or_update(
     resource_group,
