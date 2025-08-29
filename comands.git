@@ -1,0 +1,6 @@
+
+
+git remote add origin https://github.com/iurynovarino/pythonautomation
+
+git push -u origin main
+

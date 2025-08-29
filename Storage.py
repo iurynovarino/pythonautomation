@@ -1,62 +1,71 @@
+import os
+from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.storage import StorageManagementClient
 from azure.storage.blob import BlobServiceClient, PublicAccess
+from azure.core.exceptions import ResourceExistsError
 
-# Variables declaration
-subscription_id = "<YOUR_SUBSCRIPTION_ID>"  # Change to your subscription ID
-resource_group = "<YOUR_RESOURCE_GROUP>"  # Change to your resource group name
-location = "<YOUR_LOCATION>"  # Change to your desired location, e.g., "brazilsouth"
-storage_account_name = "<YOUR_STORAGE_ACCOUNT_NAME>".lower() # Change to your desired storage account name (must be lowercase and unique)
-
-# start credencials
-credential = DefaultAzureCredential()
-storage_client = StorageManagementClient(credential, subscription_id)
-
-# 1. Create a storage account
-print(f"Criando conta de armazenamento '{storage_account_name}'...")
-storage_async = storage_client.storage_accounts.begin_create(
-    resource_group_name=resource_group,
-    account_name=storage_account_name,
-    parameters={
-        "location": location,
-        "sku": {"name": "Standard_LRS"},
-        "kind": "StorageV2",
-        "access_tier": "Cool",
-        "allow_blob_public_access": True,
-        "public_network_access": "Enabled"
-    }
-)
-storage_async.result()
-print(f"Conta de armazenamento '{storage_account_name}' criada com sucesso.")
-
-# 2. Obtain the storage accouunt key
-keys = storage_client.storage_accounts.list_keys(resource_group, storage_account_name)
-account_key = keys.keys[0].value
-
-# 3. Storage account conect
-blob_service_client = BlobServiceClient(
-    f"https://{storage_account_name}.blob.core.windows.net",
-    credential=account_key
-)
-
-# 4. Create containers (make as you wish)
-containers = {
-    "auditoria": "container",
-    "templates": "container",
-    "apps": "blob",
-    "images": "blob",
-    "tutorial": "container",
-}
-
-# 5. Loping to create various containers
-for name, access in containers.items():
+def create_storage_account(storage_client, resource_group, account_name, location):
+    """Creates or updates a storage account."""
+    print(f"Criando conta de armazenamento '{account_name}'...")
     try:
-        print(f"Criando container '{name}' com acesso '{access}'...")
-        blob_service_client.create_container(
-            name,
-            public_access=PublicAccess.Container if access == "container" else PublicAccess.Blob
+        storage_async = storage_client.storage_accounts.begin_create(
+            resource_group_name=resource_group,
+            account_name=account_name,
+            parameters={
+                "location": location,
+                "sku": {"name": "Standard_LRS"},
+                "kind": "StorageV2",
+                "access_tier": "Cool",
+                "allow_blob_public_access": True,
+                "public_network_access": "Enabled"
+            }
         )
+        storage_async.result()
+        print(f"Conta de armazenamento '{account_name}' criada com sucesso.")
     except Exception as e:
-        print(f"Erro ao criar container '{name}': {e}")
+        print(f"❌ Erro ao criar conta de armazenamento: {e}")
+        raise
 
-print("Todos os containers foram processados.")
+def create_containers(blob_service_client, containers_to_create):
+    """Creates multiple blob containers with specified public access."""
+    for name, access_level_str in containers_to_create.items():
+        try:
+            print(f"Criando container '{name}' com acesso '{access_level_str}'...")
+            public_access = PublicAccess.Container if access_level_str == "container" else PublicAccess.Blob
+            blob_service_client.create_container(name, public_access=public_access)
+            print(f"  -> Container '{name}' criado.")
+        except ResourceExistsError:
+            print(f"  -> Container '{name}' já existe. Pulando.")
+        except Exception as e:
+            print(f"❌ Erro inesperado ao criar container '{name}': {e}")
+    print("\nTodos os containers foram processados.")
+
+def main():
+    """Main function to orchestrate storage provisioning."""
+    load_dotenv()
+
+    # Variables declaration
+    subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
+    resource_group = os.getenv("AZURE_RESOURCE_GROUP")
+    location = os.getenv("AZURE_LOCATION", "brazilsouth")
+    storage_account_name = os.getenv("STORAGE_ACCOUNT_NAME").lower()
+
+    credential = DefaultAzureCredential()
+    storage_client = StorageManagementClient(credential, subscription_id)
+
+    create_storage_account(storage_client, resource_group, storage_account_name, location)
+
+    blob_service_client = BlobServiceClient(
+        account_url=f"https://{storage_account_name}.blob.core.windows.net",
+        credential=credential
+    )
+
+    containers_to_create = {
+        "auditoria": "container", "templates": "container", "apps": "blob",
+        "images": "blob", "tutorial": "container",
+    }
+    create_containers(blob_service_client, containers_to_create)
+
+if __name__ == "__main__":
+    main()

@@ -1,16 +1,16 @@
-# Ambientes Virtuais
+# virtual environments
 venv/
 *.venv
 
-# Cache do Python
+# Python chache files
 __pycache__/
 *.pyc
 
-# Arquivos de IDEs
+# IDEs files
 .vscode/
 .idea/
 
-# Arquivos de dependências (se usar)
+# dependencies files
 dist/
 build/
 *.egg-info/
