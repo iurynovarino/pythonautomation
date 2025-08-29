@@ -3,16 +3,16 @@ from azure.mgmt.containerregistry import ContainerRegistryManagementClient
 from azure.mgmt.containerregistry.models import Registry, Sku
 
 # Configurações
-subscription_id = "sua  subscription_id"  # Substitua pelo ID da sua assinatura
-resource_group = "rg_teste"
-location = "brazilsouth"
-registry_name = "acrtestehml" 
+subscription_id = "<YOUR_SUBSCRIPTION_ID>"  # Change to your subscription ID
+resource_group = "<YOUR_RESOURCE_GROUP>"  # Change to your resource group name
+location = "<YOUR_LOCATION>"  # Change to your desired location, e.g., "brazilsouth"
+registry_name = "<YOUR_ACR_NAME>"  # Change to your desired ACR name (must be unique)
 
-# Autenticação
+# Autentication and client setup
 credential = DefaultAzureCredential()
 client = ContainerRegistryManagementClient(credential, subscription_id)
 
-# Criação do ACR
+# Create ACR
 print(f"Criando ACR '{registry_name}' em '{location}'...")
 
 acr = client.registries.begin_create(
