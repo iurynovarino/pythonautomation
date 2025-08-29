@@ -3,38 +3,38 @@ from azure.mgmt.dns import DnsManagementClient
 from azure.mgmt.dns.models import ARecord, RecordSet
 from azure.core.exceptions import ResourceNotFoundError
 
-# Configurações principais
-subscription_id = 'aff87ef7-615a-4815-99d9-c8673c2dfc22'
-resource_group_name = "GlobalService"
-zone_name = "custodia.seg.br"
+# Main settings
+subscription_id = '<subscription_id>'  # Change to your subscription ID
+resource_group_name = "<resource_group>"  # Change to your resource group name
+zone_name = "<your_dns_zone>"  # Change to your DNS zone name, e.g., "example.com"
 ttl = 3600
 
-# Lista de registros que você quer adicionar
+# Input your entries here
 registros = [
-    {"name": "audit-service-homolog", "ip": "13.82.228.245"},
-    {"name": "com-service-homolog", "ip": "13.82.228.245"},
-    {"name": "catalog-service-homolog", "ip": "13.82.228.245"},
-    {"name": "datadoc-service-homolog", "ip": "13.82.228.245"},
-    {"name": "decryptor-service-homolog-service-homolog", "ip": "13.82.228.245"},
-    {"name": "device-service-homolog", "ip": "13.82.228.245"},
-    {"name": "evidence-service-homolog", "ip": "13.82.228.245"},
-    {"name": "hash-service-homolog", "ip": "13.82.228.245"},
-    {"name": "hybridboard-service-homolog", "ip": "13.82.228.245"},
-    {"name": "icat-service-homolog", "ip": "13.82.228.245"},
-    {"name": "inquiry-service-homolog", "ip": "13.82.228.245"},
-    {"name": "interfacerecognition-service-homolog", "ip": "13.82.228.245"},
-    {"name": "log-service-homolog-service-homolog", "ip": "13.82.228.245"},
-    {"name": "maps-service-homolog", "ip": "13.82.228.245"},
+    {"name": "audit-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "com-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "catalog-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "datadoc-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "decryptor-service-homolog-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "device-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "evidence-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "hash-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "hybridboard-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "icat-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "inquiry-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "interfacerecognition-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "log-service-homolog-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "maps-service-homolog", "ip": "<public_ip_address>"},
     {"name": "media-service-homolog", "ip": "13.82.228.245"},
-    {"name": "monitoring-service-homolog", "ip": "13.82.228.245"},
-    {"name": "report-service-homolog", "ip": "13.82.228.245"},
-    {"name": "security-service-homolog", "ip": "13.82.228.245"},
-    {"name": "user-service-homolog", "ip": "13.82.228.245"},
-    {"name": "verso-service-homolog", "ip": "13.82.228.245"},    
-    # Adicione quantos quiser aqui
+    {"name": "monitoring-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "report-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "security-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "user-service-homolog", "ip": "<public_ip_address>"},
+    {"name": "verso-service-homolog", "ip": "<public_ip_address>"},    
+    
 ]
 
-# Autenticação
+# Autentication
 credential = DefaultAzureCredential()
 dns_client = DnsManagementClient(credential, subscription_id)
 
@@ -82,7 +82,7 @@ def create_or_update_record_set(record_name, ip_address):
         print(f"Erro inesperado ao processar '{record_name}':", e)
         raise
 
-# Loop para processar todos os registros
+# Looping to processing all registries
 for registro in registros:
     create_or_update_record_set(registro["name"], registro["ip"])
 
