@@ -11,15 +11,15 @@ from azure.mgmt.network.models import (
     ApplicationGatewayRedirectConfiguration
 )
 
-# Autenticação
+# Autentication
 credential = DefaultAzureCredential()
 
-# Informações básicas
-subscription_id = "aff87ef7-615a-4815-99d9-c8673c2dfc22"
-resource_group_name = "GlobalService"
-application_gateway_name = "custodia_agw_globalservice"
+# Basic information
+subscription_id = "<id da subscription>"  # change for your subscription ID
+resource_group_name = "<grupo de recursos>"  # change for your resource group name
+application_gateway_name = "<aplication gateway>"  # change for your app gateway name
 
-# Lista dos serviços que você quer adicionar
+# Service list
 services = [
     {
         "backend_pool_name": "pool_audit_service_hml",
@@ -253,20 +253,20 @@ services = [
     # Adicione mais serviços conforme necessário
 ]
 
-# Configurações fixas
+# fixed configurations
 frontend_ip_config_name = "appGatewayFrontendPub"
 ssl_certificate_name = "custodia-cert"
 frontend_port_443_name = "port-443"
 frontend_port_80_name = "port-80"
 
-# Inicializar o client
+# start the client
 network_client = NetworkManagementClient(credential, subscription_id)
 
-# Buscar o Application Gateway atual
+# To find the main Application Gateway
 print("Buscando Application Gateway...")
 app_gateway = network_client.application_gateways.get(resource_group_name, application_gateway_name)
 
-# Funções utilitárias
+# Utilitarian functions
 def exists(collection, name):
     return any(item.name == name for item in collection)
 
@@ -284,7 +284,7 @@ def get_next_available_priority(existing_priorities, start=100, step=10):
 # ------------------
 print("Configurando Frontend Ports se necessário...")
 
-# Buscar se já existe um frontend port para a porta 443
+# Veriry if frontend port to 443 port already exists
 existing_port_443 = next((fp for fp in app_gateway.frontend_ports if fp.port == 443), None)
 if existing_port_443:
     frontend_port_443_name = existing_port_443.name
@@ -293,7 +293,7 @@ else:
     print(f"❗ Não encontrou Frontend Port para 443. Abortando para evitar erro.")
     exit(1)
 
-# Buscar se já existe um frontend port para a porta 80
+# Veriry if frontend port to 80 port already exists
 existing_port_80 = next((fp for fp in app_gateway.frontend_ports if fp.port == 80), None)
 if existing_port_80:
     frontend_port_80_name = existing_port_80.name
@@ -303,7 +303,7 @@ else:
     exit(1)
 
 # ------------------
-# Processar Serviços
+# Services processing
 # ------------------
 for service in services:
     print(f"\n🔵 Processando serviço: {service['hostname']}")
@@ -446,7 +446,7 @@ for service in services:
         print(f"Request Routing Rule '{rule_http_redirect_name}' já existe. Pulando...")
 
 # ------------------
-# Atualizar o Application Gateway
+# Application Gateway update
 # ------------------
 print("\n🚀 Atualizando o Application Gateway...")
 poller = network_client.application_gateways.begin_create_or_update(
