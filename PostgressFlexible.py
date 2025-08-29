@@ -2,17 +2,17 @@ from azure.identity import DefaultAzureCredential
 from azure.mgmt.rdbms.postgresql_flexibleservers import PostgreSQLManagementClient
 from azure.mgmt.rdbms.postgresql_flexibleservers.models import Server, Sku, Storage, ServerVersion
 
-# Parâmetros
-subscription_id = "sua subscription_id"  # Substitua pelo ID da sua assinatura
-resource_group = "rg_teste"
-server_name = "teste-hml-db"  # Nome do servidor do banco de dados
-location = "brazilsouth"
+# Parameters
+subscription_id = "<YOUR_SUBSCRIPTION_ID>" # change to your subscription ID
+resource_group = "<YOUR_RESOURCE_GROUP>"  # change to your resource group name
+server_name = "<YOUR_SERVER_NAME>" # change to your desired server name
+location = "<YOUR_LOCATION>"  # change to your desired location, e.g., "brazilsouth"
 
-# Autenticação
+# Autentication and client setup
 credential = DefaultAzureCredential()
 client = PostgreSQLManagementClient(credential, subscription_id)
 
-# Criação do servidor
+# Creating server
 poller = client.servers.begin_create(
     resource_group_name=resource_group,
     server_name=server_name,
