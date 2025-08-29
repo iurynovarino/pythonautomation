@@ -6,17 +6,17 @@ from azure.mgmt.servicebus.models import (
     SBNamespace
 )
 
-# Variáveis de configuração
+# Variables declaration
 subscription_id = "sua_subscription_id"  # Substitua pelo ID da sua assinatura
 resource_group = "rg_teste"
 location = "brazilsouth"
 namespace_name = "sbns-teste-hml" # Nome do namespace do Service Bus
 
-# Autenticação
+# Autentication and client setup
 credential = DefaultAzureCredential()
 client = ServiceBusManagementClient(credential, subscription_id)
 
-# Criar namespace
+# Create namespace
 print(f"Criando namespace '{namespace_name}'...")
 client.namespaces.begin_create_or_update(
     resource_group_name=resource_group,
@@ -24,7 +24,7 @@ client.namespaces.begin_create_or_update(
     parameters=SBNamespace(location=location, sku={"name": "Standard"})
 ).result()
 
-# Lista de tópicos e subscrições (essa é uma lista fictícia, ajuste conforme necessário)
+# Topic list and subscriptions (adjust as you wish )
 topics_with_subs = {
     "security": ["audit", "communication"],
     "download-report": ["main"],
@@ -32,7 +32,7 @@ topics_with_subs = {
     "log-index": ["main"],
 }
 
-# Criar tópicos e subscrições
+# Create topics and subscriptions
 for topic_name, subs in topics_with_subs.items():
     print(f"Criando tópico '{topic_name}'...")
     client.topics.create_or_update(
