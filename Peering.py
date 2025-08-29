@@ -1,9 +1,9 @@
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.network import NetworkManagementClient
 
-# Parâmetros
-subscription_id = "sua subscription_id"  # Substitua pelo ID da sua assinatura
-resource_group = "rg_teste"
+# Parameters
+subscription_id = "<subscription_id>"  # change to your subscription ID 
+resource_group = "<resource_group>"  # change to your resource group name
 
 # VNet 1
 vnet1_name = "vnet_teste-hml"
@@ -15,15 +15,15 @@ vnet2_name = "vnet_globalservice"
 vnet2_rg = "GlobalService"
 vnet2_peer_name = "vnet_globalservice-to-vnet_teste-hml"
 
-# Inicializa cliente
+# Inicializing the client
 credential = DefaultAzureCredential()
 network_client = NetworkManagementClient(credential, subscription_id)
 
-# Recupera informações das redes
+# Network information recovering
 vnet1 = network_client.virtual_networks.get(vnet1_rg, vnet1_name)
 vnet2 = network_client.virtual_networks.get(vnet2_rg, vnet2_name)
 
-# 1. Peering da VNet A para VNet B
+# 1. Peering VNet A to VNet B
 print(f"Criando peering de '{vnet1_name}' para '{vnet2_name}'...")
 peer1 = network_client.virtual_network_peerings.begin_create_or_update(
     vnet1_rg,
@@ -41,7 +41,7 @@ peer1 = network_client.virtual_network_peerings.begin_create_or_update(
 ).result()
 print("Peering A → B criado.")
 
-# 2. Peering da VNet B para VNet A
+# 2. Peering VNet B to VNet A
 print(f"Criando peering de '{vnet2_name}' para '{vnet1_name}'...")
 peer2 = network_client.virtual_network_peerings.begin_create_or_update(
     vnet2_rg,
